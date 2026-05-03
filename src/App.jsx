@@ -329,7 +329,7 @@ function PageOverview({raw,mask,f,dispatch}){
         </CardBox>
       </div>
       <CardBox>
-        <STitle sub="Click any bar to cross-filter the entire dashboard by that hour of day">
+        <STitle sub="">
           Fatality rate by hour — click to cross-filter ↓
         </STitle>
         <XBar data={hourD} labelKey="h" valueKey="rate" activeSet={aH}
@@ -362,11 +362,11 @@ function PageGeo({raw,mask,f,dispatch}){
       <DrillPanel wardIdx={drill} raw={raw} mask={mask} onClose={()=>setDrill(null)}/>
       <div style={{background:`${C.info}10`,border:`1px solid ${C.info}25`,borderRadius:8,
         padding:"7px 12px",marginBottom:12,fontSize:11,color:C.info}}>
-        ◈ Click ward block to cross-filter all charts · Click ward name button for drill-through panel →
+        
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12}}>
         <CardBox>
-          <STitle sub="Shaded by fatality rate · click to filter · number = ward ID">
+          <STitle sub="Shaded by fatality rate · number = ward ID">
             Ward choropleth
           </STitle>
           <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:3,marginBottom:10}}>
@@ -411,7 +411,7 @@ function PageGeo({raw,mask,f,dispatch}){
         </CardBox>
 
         <CardBox>
-          <STitle sub="Click to filter · all 25 wards ranked">Ward ranking</STitle>
+          <STitle sub="">Ward ranking</STitle>
           <div style={{overflowY:"auto",maxHeight:330,display:"flex",flexDirection:"column",gap:3}}>
             {wardD.filter(w=>w.total>0).sort((a,b)=>b.rate-a.rate).map((w,i)=>{
               const idx=raw.wardV.indexOf(w.label);
@@ -435,7 +435,7 @@ function PageGeo({raw,mask,f,dispatch}){
       </div>
 
       <CardBox>
-        <STitle sub="Dynamically updates with your current filters · 50m GPS clustering">
+        <STitle sub="">
           Top 10 fatal intersections (live with filters)
         </STitle>
         <table style={{width:"100%",borderCollapse:"collapse",fontSize:11}}>
@@ -477,7 +477,7 @@ function PageRisk({raw,mask,f,dispatch}){
 
   const crossBar=(data,valKey,activeSet,onToggle,title,sub)=>(
     <CardBox>
-      <STitle sub={`${sub} · ${activeSet.size>0?activeSet.size+" selected":"click to filter"}`}>{title}</STitle>
+      <STitle sub={`${sub}${activeSet.size>0?" · "+activeSet.size+" selected":""}`}>{title}</STitle>
       <XBar data={data} labelKey="label" valueKey={valKey} activeSet={activeSet}
         onToggle={d=>{const idx=data.findIndex(x=>x.label===d.label);onToggle(idx);}}
         colorFn={d=>rateColor(d[valKey])} height={160}/>
@@ -488,29 +488,29 @@ function PageRisk({raw,mask,f,dispatch}){
     <div>
       <div style={{background:`${C.warn}12`,border:`1px solid ${C.warn}28`,borderRadius:8,
         padding:"7px 12px",marginBottom:12,fontSize:11,color:C.warn}}>
-        ↕ Click any bar to cross-filter all four pages simultaneously. Multiple selections = AND logic.
+        
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12}}>
         <CardBox>
-          <STitle sub={`${aL.size>0?aL.size+" selected":"click to filter"}`}>Lighting — click to filter</STitle>
+          <STitle sub={`${aL.size>0?aL.size+" selected":""}`}>Lighting</STitle>
           <XBar data={lightD} activeSet={aL}
             onToggle={d=>{const idx=raw.lightV.indexOf(d.label);dispatch({type:"TOGGLE_LIGHT",v:idx});}}
             colorFn={d=>rateColor(d.rate)} height={160}/>
         </CardBox>
         <CardBox>
-          <STitle sub={`${aU.size>0?aU.size+" selected":"click to filter"}`}>Road user — click to filter</STitle>
+          <STitle sub={`${aU.size>0?aU.size+" selected":""}`}>Road user</STitle>
           <XBar data={userD} activeSet={aU}
             onToggle={d=>{const idx=raw.userV.indexOf(d.label);dispatch({type:"TOGGLE_USER",v:idx});}}
             colorFn={d=>rateColor(d.rate)} height={160}/>
         </CardBox>
         <CardBox>
-          <STitle sub={`${aS.size>0?aS.size+" selected":"click to filter"}`}>Road surface — click to filter</STitle>
+          <STitle sub={`${aS.size>0?aS.size+" selected":""}`}>Road surface</STitle>
           <XBar data={surfD} activeSet={aS}
             onToggle={d=>{const idx=raw.surfV.indexOf(d.label);dispatch({type:"TOGGLE_SURF",v:idx});}}
             colorFn={d=>rateColor(d.rate)} height={160}/>
         </CardBox>
         <CardBox>
-          <STitle sub={`${aC.size>0?aC.size+" selected":"click to filter"}`}>Traffic control — click to filter</STitle>
+          <STitle sub={`${aC.size>0?aC.size+" selected":""}`}>Traffic control</STitle>
           <XBar data={ctrlD.map(d=>({...d,label:d.label.length>14?d.label.slice(0,13)+"…":d.label,_orig:d.label}))}
             activeSet={aC}
             onToggle={d=>{const idx=raw.ctrlV.indexOf(d._orig||d.label);dispatch({type:"TOGGLE_CTRL",v:idx});}}
@@ -680,7 +680,6 @@ export default function App(){
             <span style={{color:C.muted,fontWeight:400,fontSize:14}}>Toronto 2006–2026</span>
           </div>
           <div style={{fontSize:10,color:C.muted,marginTop:2}}>
-            Group 5 · DAMO-699-5 · University of Niagara Falls Canada · XGBoost AUC=0.878
           </div>
         </div>
 
@@ -731,7 +730,6 @@ export default function App(){
           </button>
         ))}
         <div style={{marginLeft:"auto",display:"flex",alignItems:"center",fontSize:10,color:C.dim}}>
-          Story 12 · Interactive cross-filter dashboard
         </div>
       </div>
 
@@ -751,7 +749,7 @@ export default function App(){
       <div style={{borderTop:`1px solid ${C.border}`,padding:"8px 20px",
         display:"flex",justifyContent:"space-between",fontSize:10,color:C.dim,background:C.surface}}>
         <span>City of Toronto KSI Open Data · Toronto Police Service · 2006–2026</span>
-        <span>⚠ Research tool only — not for operational or enforcement use</span>
+        
       </div>
     </div>
   );
